@@ -103,7 +103,7 @@ namespace BlogEngineWebApp.Tests.Controllers
             A.CallTo(() => _mapper.Map<List<CategoryDto>>(categories)).Returns(categoriesDto);
 
             var result = _categoryController.GetCategories();
-            result.Should().BeOfType<ViewResult>();
+            result.Should().BeOfType<OkObjectResult>();
         }
 
         [Fact]

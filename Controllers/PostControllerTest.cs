@@ -52,7 +52,7 @@ namespace BlogEngineWebApp.Tests.Controllers
             A.CallTo(() => _mapper.Map<List<PostDto>>(_postRepository.GetPosts())).Returns(listPostDto);
 
             var result = _postController.GetPosts();
-            result.Should().BeOfType<ViewResult>();
+            result.Should().BeOfType<OkObjectResult>();
         }
 
         [Fact]
