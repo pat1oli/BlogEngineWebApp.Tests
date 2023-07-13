@@ -32,7 +32,7 @@ namespace BlogEngineWebApp.Tests.Controllers
             A.CallTo(() => _categoryRepository.CreateCategory(category)).Returns(true);
             
             var result = _categoryController.Add(categoryDto);
-            result.Should().BeOfType<OkObjectResult>();
+            result.Should().BeOfType<RedirectToActionResult>();
         }
 
         [Fact]
@@ -50,29 +50,31 @@ namespace BlogEngineWebApp.Tests.Controllers
         [Fact]
         public void CategoryController_UpdateCategory_ReturnsSuccess()
         {
-            var categoryDtoUpdate = new CategoryDto { CategoryId = 1, Title = "The Ok Tilte" };
-            var categoryUpdate = new Category { CategoryId = 1, Title = "The Ok Title", Posts = null };
+            int id = 1;
+            var categoryDtoUpdate = new CategoryDto { CategoryId = id, Title = "The Ok Tilte" };
+            var categoryUpdate = new Category { CategoryId = id, Title = "The Ok Title", Posts = null };
 
             A.CallTo(() => _categoryRepository.CategoryExists(categoryDtoUpdate.CategoryId)).Returns(true);
             A.CallTo(() => _categoryRepository.IsUniqueTitle(categoryDtoUpdate.Title)).Returns(1);
             A.CallTo(() => _mapper.Map<Category>(categoryDtoUpdate)).Returns(categoryUpdate);
             A.CallTo(() => _categoryRepository.UpdateCategory(categoryUpdate)).Returns(true);
 
-            var result = _categoryController.Update(categoryDtoUpdate);
-            result.Should().BeOfType<OkObjectResult>();
+            var result = _categoryController.Update(1, categoryDtoUpdate);
+            result.Should().BeOfType<ViewResult>();
         }
 
         [Fact]
         public void CategoryController_UpdateCategory_WhenMoreThan1Title_ReturnsBadRequest()
         {
-            var categoryDtoUpdate = new CategoryDto { CategoryId = 1, Title = "The Ok Tilte" };
-            var categoryUpdate = new Category { CategoryId = 1, Title = "The Ok Title", Posts = null };
+            int id = 1;
+            var categoryDtoUpdate = new CategoryDto { CategoryId = id, Title = "The Ok Tilte" };
+            var categoryUpdate = new Category { CategoryId = id, Title = "The Ok Title", Posts = null };
 
             A.CallTo(() => _categoryRepository.CategoryExists(categoryDtoUpdate.CategoryId)).Returns(true);
             A.CallTo(() => _categoryRepository.IsUniqueTitle(categoryDtoUpdate.Title)).Returns(2);
 
-            var result = _categoryController.Update(categoryDtoUpdate);
-            result.Should().BeOfType<BadRequestObjectResult>();
+            var result = _categoryController.Update(id, categoryDtoUpdate);
+            result.Should().BeOfType<ViewResult>();
         }
 
         [Fact]
@@ -101,7 +103,7 @@ namespace BlogEngineWebApp.Tests.Controllers
             A.CallTo(() => _mapper.Map<List<CategoryDto>>(categories)).Returns(categoriesDto);
 
             var result = _categoryController.GetCategories();
-            result.Should().BeOfType<OkObjectResult>();
+            result.Should().BeOfType<ViewResult>();
         }
 
         [Fact]

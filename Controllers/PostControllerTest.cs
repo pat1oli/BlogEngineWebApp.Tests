@@ -33,7 +33,7 @@ namespace BlogEngineWebApp.Tests.Controllers
         {
 
             A.CallTo(() => _mapper.Map<Post>(_postDto)).Returns(_post);
-            A.CallTo(() => _postRepository.IsUniqueTitle(_postDto.Title)).Returns(1);
+            A.CallTo(() => _postRepository.IsUniqueTitle(_postDto.Title)).Returns(0);
             A.CallTo(() => _postRepository.CreatePost(_post)).Returns(true);
 
             var result = _postController.Add(_postDto);
@@ -50,7 +50,7 @@ namespace BlogEngineWebApp.Tests.Controllers
             A.CallTo(() => _mapper.Map<List<PostDto>>(_postRepository.GetPosts())).Returns(listPostDto);
 
             var result = _postController.GetPosts();
-            result.Should().BeOfType<OkObjectResult>();
+            result.Should().BeOfType<ViewResult>();
         }
 
         [Fact]
