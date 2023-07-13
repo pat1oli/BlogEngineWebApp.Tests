@@ -15,6 +15,7 @@ namespace BlogEngineWebApp.Tests.Controllers
     {
         private PostController _postController;
         private IPostRepository _postRepository;
+        private ICategoryRepository _categoryRepository;
         private IMapper _mapper;
         private Post _post;
         private PostDto _postDto;
@@ -22,8 +23,9 @@ namespace BlogEngineWebApp.Tests.Controllers
         public PostControllerTest()
         {
             _postRepository = A.Fake<IPostRepository>();
+            _categoryRepository = A.Fake<ICategoryRepository>();
             _mapper = A.Fake<IMapper>();
-            _postController = new PostController(_postRepository, _mapper);
+            _postController = new PostController(_postRepository, _mapper, _categoryRepository);
             _post = Utility.CreateCustomPost();
             _postDto = Utility.CreateCustomPostDto();
         }
@@ -37,7 +39,7 @@ namespace BlogEngineWebApp.Tests.Controllers
             A.CallTo(() => _postRepository.CreatePost(_post)).Returns(true);
 
             var result = _postController.Add(_postDto);
-            result.Should().BeOfType<OkObjectResult>();
+            result.Should().BeOfType<RedirectToActionResult>();
         }
 
         [Fact]
